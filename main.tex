@@ -712,9 +712,13 @@
 
 \begin{frame}{Régression quantile}
 
-\begin{exampleblock}{Régression linéaire}
-    
-\end{exampleblock}
+    \begin{exampleblock}{Régression linéaire}
+        \vspace{-1cm}
+        \begin{align*}
+            \mathbb{E}(Y|\boldsymbol{X}) &= \boldsymbol{X}\boldsymbol{\beta}\\
+            \widehat{\boldsymbol{\beta}} = \argmin_\beta \mathbb{E}[(Y - \boldsymbol{X}\boldsymbol{\beta})^2]
+        \end{align*}
+    \end{exampleblock}
     
 \end{frame}
 
@@ -1004,6 +1008,34 @@
 \end{align*}
     \end{itemize}
 \end{frame}
+
+\begin{frame}{Conception du modèle}
+    \begin{itemize}
+        \fleche \textbf{Problème}
+        \begin{itemize}
+            \cercle Avoir un arbre de décision trop développé ne nous aide pas.
+            \cercle Il faut garder un aspect d'aléatoire lors de la simulation des paiements.
+        \end{itemize}
+        \pause
+        \fleche \textbf{Solution}
+        \begin{itemize}
+            \cercle Ajout de deux conditions à l'arbre de décision pour limiter sa taille:
+            \begin{itemize}
+                \cercle  Nombre minimal d'observations par feuille.
+                \cercle Élagage de l'arbre à l'aide d'un paramètre de complexité à la fonction objective.
+             \end{itemize}
+        \end{itemize}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Conception du modèle}
+    \begin{itemize}
+        \fleche  Change une étape au modèle d'Antonio et Plat (2014):
+        \begin{itemize}
+            \cercle Si paiement, une pige aléatoire dans les paiements de la base de données qui respectent chacune des conditions menant à la feuille dans laquelle la réclamation est classifiée.
+        \end{itemize}
+    \end{itemize}
+\end{frame}
 % ----------
 % ----------
 % ----------
@@ -1014,20 +1046,3 @@
 % ------------------------------------------------------------------------------------------------------------------------------
 
 \end{document}
-
-
-% \begin{frame}{Processus de Poisson avec marqueurs}
-
-% \begin{itemize}
-%     \fleche<1-> On simule d'abord les événements selon le processus de Poisson (ici en 2 dimensions)
-%     \fleche<2-> Ensuite on simule le marqueur pour chaque événement
-% \end{itemize}
-
-% \begin{figure}
-%     \centering
-%     \includegraphics<1>[width = 0.6\textwidth]{poisson_process_2d.pdf}
-%     \includegraphics<2>[width = 0.6\textwidth]{marked_poisson_process_2d.pdf}
-% \end{figure}
-
-% \end{frame}
-
