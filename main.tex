@@ -649,23 +649,32 @@
 
 % ----------
 
+\begin{frame}{Résultats sur données simulées}
+
+    \begin{figure}
+        \centering
+        \includegraphics[width = 0.85\textwidth]{comparaison_ind_coll_2.pdf}
+    \end{figure}
+
+\end{frame}
+
+% ----------
+
 \section{Modifications -- Francis}
 
 % ----------
 
 \begin{frame}{Mise en contexte}
 
-\begin{exampleblock}{Question guide}
-    La régression quantile permet-elle de mieux modéliser la sévérité des paiements que les GLM en provisionnement non-vie?
-\end{exampleblock}
-
-\begin{alertblock}{Résumé du projet}
-    \begin{itemize}
-        \fleche Modélisation de la sévérité des paiements avec la régression quantile.
-    \end{itemize}
-\end{alertblock}
-
-
+    \begin{exampleblock}{Question guide}
+        La régression quantile permet-elle de mieux modéliser la sévérité des paiements que les GLM en provisionnement non-vie?
+    \end{exampleblock}
+    
+    \begin{alertblock}{Résumé du projet}
+        \begin{itemize}
+            \fleche Modélisation de la sévérité des paiements avec la régression quantile.
+        \end{itemize}
+    \end{alertblock}
 
 \end{frame}
 
@@ -673,29 +682,39 @@
 
 \begin{frame}{Mise en contexte}
 
-\begin{itemize}[itemsep = 0.4cm]
-    \fleche Variable réponse: log-paiement.
-    \fleche Variable explicative: année de développement.
-    \fleche Ensemble d'entrainement: contient tous les paiements observés avant 2006 (79 921 observations).
-    \fleche Ensemble de validation: contient tous les paiements associés au réclamations RBNS observés après 2006 (3153 observations).
-\end{itemize}
-\vspace{0.8cm}
-\begin{tikzpicture}[scale = 0.7, rotLabel/.style = {above = 3pt, rotate = 90, anchor = 200, right = 3pt}]
-	% Fleche ligne du temps
-	\draw[->, very thick] (0, 0) -- (15, 0);
-	% Années
-	\draw (1, 0) node[below = 3pt] {1994};
-	\draw (8, 0) node[below = 3pt] {2006};
-	% Ticks
-	\foreach \x in {1, 8}
-      	\draw (\x cm,3pt) -- (\x cm, -3pt);
-	% Curly braces
-	\draw [thick, decorate, decoration = {brace, amplitude = 5pt, raise = 4pt}] (1.05, 0) -- (7.95, 0);
-	\draw [thick, decorate, decoration = {brace, amplitude = 5pt, raise = 4pt}] (8.05, 0) -- (14.7, 0);
-	% Écriture
-	\draw (4.5, 0) node[above = 10pt] {Entrainement};
-	\draw (11.35, 0) node[above = 10pt] {Validation};
-\end{tikzpicture}
+    \begin{itemize}[itemsep = 0.4cm]
+        \fleche Variable réponse: log-paiement.
+        \fleche Variable explicative: année de développement.
+        \fleche Ensemble d'entrainement: contient tous les paiements observés avant 2006 (79 921 observations).
+        \fleche Ensemble de validation: contient tous les paiements associés au réclamations RBNS observés après 2006 (3153 observations).
+    \end{itemize}
+    \vspace{0.8cm}
+    \begin{tikzpicture}[scale = 0.7, rotLabel/.style = {above = 3pt, rotate = 90, anchor = 200, right = 3pt}]
+    	% Fleche ligne du temps
+    	\draw[->, very thick] (0, 0) -- (15, 0);
+    	% Années
+    	\draw (1, 0) node[below = 3pt] {1994};
+    	\draw (8, 0) node[below = 3pt] {2006};
+    	% Ticks
+    	\foreach \x in {1, 8}
+          	\draw (\x cm,3pt) -- (\x cm, -3pt);
+    	% Curly braces
+    	\draw [thick, decorate, decoration = {brace, amplitude = 5pt, raise = 4pt}] (1.05, 0) -- (7.95, 0);
+    	\draw [thick, decorate, decoration = {brace, amplitude = 5pt, raise = 4pt}] (8.05, 0) -- (14.7, 0);
+    	% Écriture
+    	\draw (4.5, 0) node[above = 10pt] {Entrainement};
+    	\draw (11.35, 0) node[above = 10pt] {Validation};
+    \end{tikzpicture}
+    
+\end{frame}
+
+% ----------
+
+\begin{frame}{Régression quantile}
+
+\begin{exampleblock}{Régression linéaire}
+    
+\end{exampleblock}
     
 \end{frame}
 
@@ -902,14 +921,89 @@
 % ----------
 
 \section{Modifications -- Manuel}
+\frame{\sectionpage}
+% ----------
+
+\begin{frame}{Mise en contexte}
+    \begin{itemize}
+            \fleche \textbf{Modèle individuel est très malléable}
+            \begin{itemize}
+                \cercle Processus de Cox (Avanzi et al, 2016).
+                \cercle Ajout de copule (Lopez, 2019).
+                \cercle Raccorder une distribution Gamma et une distribution Pareto (Reynkens et al., 2016).
+            \end{itemize}
+            \pause
+            \fleche \textbf{Apprentissage supervisé}
+            \begin{itemize}
+                \cercle Réseaux de neurones (Kuo, 2018).
+                \cercle Gradient boosting (Duval et Pigeon, 2019).
+            \end{itemize}
+    \end{itemize}
+\end{frame}
 
 % ----------
 
-\begin{frame}{Première slide -- Manuel}
-    
+\begin{frame}{Mise en contexte}
+    \begin{itemize}
+            \fleche \textbf{Arbre de décision (Breiman et al.,1984)}
+            \begin{itemize}
+                \cercle Modèle individuel non paramétrique entièrement basé sur l’utilisation des arbres de décisions (Wüthrich, 2018).
+                \cercle Prendre en considération la censure de la variable prédite (Lopez et al., 2016, 2019).
+            \end{itemize}
+    \end{itemize}
 \end{frame}
 
+\begin{frame}{Mise en contexte}
 
+    \begin{exampleblock}{Question guide}
+        Est-ce que l’utilisation d’arbres de décision dans la modélisation des paiements peut être une alternative envisageable à l’approche paramétrique?
+    \end{exampleblock}
+
+    \begin{alertblock}{Résumé du projet}
+        \begin{itemize}
+            \fleche Modélisation de la sévérité des paiements avec les arbres de décisions et des ajustements univarié.
+        \end{itemize}
+    \end{alertblock}
+\end{frame}
+
+\begin{frame}{Conception du modèle}
+    \begin{itemize}
+        \fleche Arbre de décision pour les paiements.
+        \fleche Utiliser la classification faite par la division binaire récursive.
+        \fleche Pige aléatoire dans les paiements de la base de données qui respectent chacune des conditions menant à cette feuille.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Conception du modèle}
+    \begin{itemize}
+        \fleche Règle binaire (continue):
+             \begin{align*}
+                R_1(b,c) &= \{ X_1 \cdots X_B | X_b \leq c \} \\
+                R_2(b,c) &= \{ X_1 \cdots X_B | X_b > c \} \text{ .}
+            \end{align*}
+    \pause
+        \fleche Règle binaire (factorielle):
+            \begin{align*}
+            R_1(b,c) &= \{ X_1 \cdots X_B | X_b \in c \} \\
+            R_2(b,c) &= \{ X_1 \cdots X_B | X_b \notin c \} \text{ .}
+            \end{align*}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Conception du modèle}
+    \begin{itemize}
+        \fleche La fonction objective utilisée est la somme des erreurs au carré (SEC):
+             \begin{align*}
+    \overline{P} &= \frac{1}{q_{\text{total}}} \sum_{q \geq 1} P_{q} \\
+    \text{SEC} &= \sum_{q \geq 1}\left(\overline{P} - P_{q}\right)^{2} \text{,} 
+\end{align*}
+    \pause
+        \fleche Le choix de la covariable $b$ et du $c$ sont ceux qui minimise le SEC suivant:
+            \begin{align*}
+    \text{SEC} &= \sum_{q \in R_{1}(b,c)}\left(\overline{P}_{R_{1}(b,c)} - P_{q}\right)^{2} + \sum_{q \in R_{2}(b,c)}\left(\overline{P}_{R_{2}(b,c)} - P_{q}\right)^{2} \text{.} 
+\end{align*}
+    \end{itemize}
+\end{frame}
 % ----------
 % ----------
 % ----------
