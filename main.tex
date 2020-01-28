@@ -296,7 +296,7 @@
 
 % ----------
 
-\begin{frame}{Processus de Poisson avec marqueurs}
+\begin{frame}{Processus de Poisson avec marqueurs (suite)}
 
 \begin{figure}
 	\centering
@@ -422,7 +422,7 @@
 
 % ----------
 
-\begin{frame}{Paramètres à estimer}
+\begin{frame}{Paramètres à estimer (suite)}
 
     \begin{figure}
         \centering
@@ -595,7 +595,7 @@
 
 % ----------
 
-\begin{frame}{Simulation des données de réclamations}
+\begin{frame}{Simulation des données de réclamations (suite)}
 
     \textbf{Extrait de la base de données simulée}:
 
@@ -1066,6 +1066,45 @@
         \end{itemize}
     \end{itemize}
 \end{frame}
+
+\begin{frame}{Conception du modèle}
+    \begin{itemize}
+        \fleche \mathbf{Variante:}
+        \begin{itemize}
+            \cercle Ajustement univarié des paiements à l'intérieur de chaque feuille.
+            \cercle Log normal, Gamma et Pareto.
+            \cercle Méthode du maximum de vraisemblance.
+            \cercle Le choix de la distribution pour chaque feuille est déterminé à l'aide du critère du BIC.
+        \end{itemize}
+        \pause
+        \fleche Si paiement, alors il y a une réalisation de la loi de probabilité associée à la feuille dans laquelle la réclamation est classifiée.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Adaptation du modèle aux données simulées}
+    \begin{itemize}
+        \fleche \mathbf{Identique à l'exception de:}
+        \begin{itemize}
+            \cercle 250 000 observations.
+            \cercle La date d'évaluation est le 31 décembre 2000. (140 871 observations)
+            \cercle Séparé en deux groupes:
+            \begin{itemize}
+                \cercle secteurs d'affaires 1 et 4,
+                \cercle secteurs d'affaires 2 et 3.
+            \end{itemize}
+        \end{itemize}
+        \pause
+    \fleche Le choix des variables:
+    \begin{itemize}
+        \cercle \textit{age};
+        \cercle \textit{cc};
+        \cercle \textit{inj\textunderscore part}; et 
+        \cercle \textit{time}
+    \end{itemize}
+\end{itemize}
+\end{frame}
+
+
 % ----------
 % ----------
 % ----------
