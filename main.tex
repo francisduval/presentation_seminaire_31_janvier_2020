@@ -43,6 +43,8 @@
 \usepackage{algorithm}
 \usepackage{algorithm2e}
 \usepackage{adjustbox}
+\usepackage[most]{tcolorbox}
+\usepackage{array}
 
 
 % TikZ --------------------------------------------------------------------------------------------------------------------------
@@ -75,7 +77,7 @@
 \renewcommand\theadgape{\Gape[4pt]}
 \renewcommand\cellgape{\Gape[4pt]}
 \newcommand{\emphcol}[1]{\textcolor{morange}{#1}}
-\newcommand{\argmin}[1]{\underset{#1}{\operatorname{arg}\,\operatorname{min}}\;}
+\newcommand{\argmin}[1]{\underset{#1}{\operatorname{argmin}}\;}
 \newcolumntype{?}{!{\vrule width 1pt}}
 \SetKwInput{KwInit}{Initialiser}
 \DeclareMathOperator*{\moyenne}{moyenne}
@@ -671,24 +673,14 @@
     \end{exampleblock}
     
     \begin{alertblock}{Résumé du projet}
-        \begin{itemize}
-            \fleche Modélisation de la sévérité des paiements avec la régression quantile.
-        \end{itemize}
+        Modélisation de la sévérité des paiements avec la régression quantile. Comparaison de la performance avec un GLM (gaussien). 
     \end{alertblock}
-
-\end{frame}
-
-% ----------
-
-\begin{frame}{Mise en contexte}
-
-    \begin{itemize}[itemsep = 0.4cm]
-        \fleche Variable réponse: log-paiement.
-        \fleche Variable explicative: année de développement.
-        \fleche Ensemble d'entrainement: contient tous les paiements observés avant 2006 (79 921 observations).
-        \fleche Ensemble de validation: contient tous les paiements associés au réclamations RBNS observés après 2006 (3153 observations).
+    
+    \begin{itemize}
+        \fleche Ensemble d'entrainement: tous les paiements observés avant 2006.
+        \fleche Ensemble de validation: tous les paiements associés au réclamations RBNS observés après 2006.
     \end{itemize}
-    \vspace{0.8cm}
+    
     \begin{tikzpicture}[scale = 0.7, rotLabel/.style = {above = 3pt, rotate = 90, anchor = 200, right = 3pt}]
     	% Fleche ligne du temps
     	\draw[->, very thick] (0, 0) -- (15, 0);
@@ -705,93 +697,89 @@
     	\draw (4.5, 0) node[above = 10pt] {Entrainement};
     	\draw (11.35, 0) node[above = 10pt] {Validation};
     \end{tikzpicture}
-    
+
 \end{frame}
 
 % ----------
 
-\begin{frame}{Régression quantile}
-
-    \begin{exampleblock}{Régression linéaire}
-        \vspace{-1cm}
-        \begin{align*}
-            \mathbb{E}(Y|\boldsymbol{X}) &= \boldsymbol{X}\boldsymbol{\beta}\\
-            \widehat{\boldsymbol{\beta}} = \argmin_\beta \mathbb{E}[(Y - \boldsymbol{X}\boldsymbol{\beta})^2]
-        \end{align*}
-    \end{exampleblock}
+\begin{frame}{Régression quantile vs régression linéaire}
     
-\end{frame}
-
-% ----------
-
-\begin{frame}{Nombre de quantiles comme hyperparamètre}
-
-\begin{itemize}[itemsep = 0.4cm]
-    \fleche Traiter le nombre de quantiles modélisés comme un hyperparamètre.
+    \begin{tcolorbox}[enhanced, notitle, clip upper, fontupper = \sffamily, tabularx = {>{\cellcolor[gray]{.5}\color{white}}r > {\centering\arraybackslash}X > {\centering\arraybackslash}X}]
+    
+        &\cellcolor{black!80}\color{white} \textbf{Régression linéaire} &\cellcolor{black!80}\color{white} \textbf{Régression quantile}\\
+        \rowcolor{white} \textbf{Formule} & $\mathbb{E}(Y|\boldsymbol{X})= \boldsymbol{X}\boldsymbol{\beta}$ & $Q_{Y|\boldsymbol{X}}(\tau)= \boldsymbol{X}\boldsymbol{\beta}_\tau$\\
+         \rowcolor{black!30} \textbf{Fonction de perte} & x^2 &$\rho_\tau(x)$\\
+        \rowcolor{white} \textbf{Estimation} & \footnotesize $\widehat{\boldsymbol{\beta}} = \argmin{\beta} \frac{1}{n} \sum\limits_{i = 1}^n (y_i - \boldsymbol{x}_i\boldsymbol{\beta})^2$ & \footnotesize $\widehat{\boldsymbol{\beta}}_\tau = \argmin{\beta} \frac{1}{n} \sum\limits_{i = 1}^n \rho_\tau(y_i - \boldsymbol{x}_i\boldsymbol{\beta})$\\
+        \rowcolor{black!30} \textbf{Distribution des $Y_i$} & N(\boldsymbol{x}_i\boldsymbol{\beta}, \sigma^2) & Non paramétrique \\
+    \end{tcolorbox}
+    
     \begin{itemize}
-        \blt Pas assez de quantiles: sous-ajustement
-        \blt Trop de quantiles: surajustement
+        \fleche Dans la régression quantile, on modélise le \textbf{quantile conditionnel} de niveau $\tau$.
+        \fleche Fonction de perte:
+            \begin{align*}
+                \rho_\tau(x) &=
+                \begin{dcases}
+                    (1 - \tau)|x| & x \le 0\\
+                    \tau x & x > 0
+                \end{dcases} 
+            \end{align*}
     \end{itemize}
-    \fleche \textit{Machine learning}: hyperparamètres déterminés en calculant une distance entre l'observé et la prédiction \alert{ponctuelle} (RMSE, MAE, etc.) sur échantillon test (ou avec validation croisée). 
-    \fleche Dans le cadre des réserves individuelles, on veut mesurer la distance entre la \alert{distribution} observée et prédite.
-    \fleche On a donc besoin d'une statistique qui mesure la distance entre 2 distributions.
-\end{itemize}
     
 \end{frame}
 
 % ----------
 
-\begin{frame}{Statistique de Kolmogorov-Smirnov}
-
-\begin{itemize}
-    \fleche Mesure de distance entre 2 distributions.
-    \fleche $\text{K-S} = \max_x \left|F_1(x) - F_2(x)\right|$
-\end{itemize}
-\begin{figure}
-    \includegraphics[width = 0.85\textwidth]{ks_plot.pdf}
-\end{figure}
-
-\end{frame}
-
-% ----------
-
-\begin{frame}{Procédure pour choisir le nombre de quantiles optimal}
+\begin{frame}{Exemples de fonctions de perte}
     
-\begin{exampleblock}{Procédure}
+    \begin{figure}
+        \centering
+        \includegraphics[width = 0.8\textwidth]{loss_functions.pdf}
+    \end{figure}
+    
     \begin{itemize}
-        \item[\circled{1}] Séparer l'ensemble d'entrainement en 2: train1 et train2.
-        \item[\circled{2}] Ajuster une régression quantile à $n$ quantiles sur train1.
-        \item[\circled{3}] À l'aide du modèle ajusté, simuler plusieurs réponses (paiements) pour chaque observation de train2.
-        \item[\circled{4}] Calculer la statistique de K-S entre la distribution simulée et la distribution empirique des paiements de train2.
-        \item[\circled{5}] Refaire pour plusieurs valeurs de $n$ et choisir $n$ tel que la statistique de K-S est la plus petite.
+        \fleche Notez que la régression quantile pénalise moins les grandes déviations que la régression linéaire, ce qui la rend plus robuste.
     \end{itemize}
-\end{exampleblock}
     
 \end{frame}
 
 % ----------
 
-\begin{frame}{Résultats}
+\begin{frame}{Exemple d'ajustement -- Régression quantile}
 
-\begin{figure}
-    \includegraphics[width = \textwidth]{rq_tuning.pdf}
-\end{figure}
+    \begin{figure}
+        \centering
+        \includegraphics[width = 0.88\textwidth, trim = 0 0 0 60]{exemple_fit_rq.pdf}
+    \end{figure}
     
+\end{frame}
+
+% ----------
+
+
+\begin{frame}{Exemple d'ajustement -- Régression linéaire}
+
+    \begin{figure}
+        \centering
+        \includegraphics[width = 0.88\textwidth, trim = 0 0 0 60]{exemple_fit_lm.pdf}
+    \end{figure}    
+
 \end{frame}
 
 % ----------
 
 \begin{frame}{Analyse comparative}
 
-\begin{itemize}[itemsep = 0.4cm]
-    \fleche Comparaison de la performance entre la \alert{régression linéaire} et la \alert{régression quantile} sur le jeu de données simulé.
-    \fleche Performance mesurée avec la statistique de \alert{Kolmogorov-Smirnov} et avec l'\alert{erreur absolue moyenne} sur le total des paiements.
-    \fleche 2 formules considérées: 
-    \begin{itemize}
-        \blt Modèle linéaire: \texttt{Log-paiement $\sim$ DY}
-        \blt Modèle quadratique: \texttt{Log-paiement $\sim$ DY + DY$^2$}
+    \begin{itemize}[itemsep = 0.4cm]
+        \fleche Comparaison de la performance entre la \textbf{régression linéaire} et la \textbf{régression quantile} sur le jeu de données simulé.
+        \fleche Performance mesurée avec la statistique de \textbf{Kolmogorov-Smirnov} et avec l'\textbf{erreur absolue moyenne} sur le total des paiements.
+        \fleche 4 formules considérées: 
+        \begin{itemize}
+            \cercle Modèle catégoriel: \texttt{Log-paiement $\sim$ as.factor(DY)}
+            \cercle Modèle linéaire: \texttt{Log-paiement $\sim$ DY}
+            \cercle Modèle quadratique: \texttt{Log-paiement $\sim$ DY + DY$^2$}
+            \cercle Modèle cubique: \texttt{Log-paiement $\sim$ DY + DY$^2$ + DY$^3$}
+        \end{itemize}
     \end{itemize}
-\end{itemize}
     
 \end{frame}
 
@@ -799,9 +787,19 @@
 
 \begin{frame}{Données d'entrainement et de validation}
 
-\begin{figure}
-    \includegraphics[width = 0.7\textwidth]{train_val_01.png}
-\end{figure}
+    \begin{figure}
+        \includegraphics[width = 0.95\textwidth]{nuage_points_overleaf.png}
+    \end{figure}
+    
+\end{frame}
+
+% ----------
+
+\begin{frame}{Entrainement des modèles catégoriels}
+    
+    \begin{figure}
+        \includegraphics[width = \textwidth]{fit_fac.png}
+    \end{figure}
     
 \end{frame}
 
@@ -809,9 +807,9 @@
 
 \begin{frame}{Entrainement des modèles linéaires}
 
-\begin{figure}
-    \includegraphics[width = \textwidth]{plot_fit_1.png}
-\end{figure}
+    \begin{figure}
+        \includegraphics[width = \textwidth]{fit_degre_1.png}
+    \end{figure}
     
 \end{frame}
 
@@ -819,19 +817,39 @@
 
 \begin{frame}{Entrainement des modèles quadratiques}
 
-\begin{figure}
-    \includegraphics[width = \textwidth]{plot_fit_2.png}
-\end{figure}
+    \begin{figure}
+        \includegraphics[width = \textwidth]{fit_degre_2.png}
+    \end{figure}
     
+\end{frame}
+
+% ----------
+
+\begin{frame}{Entrainement des modèles cubiques}
+
+    \begin{figure}
+        \includegraphics[width = \textwidth]{fit_degre_3.png}
+    \end{figure}
+    
+\end{frame}
+
+% ----------
+
+\begin{frame}{Validation des modèles catégoriels}
+
+    \begin{figure}
+        \includegraphics[width = 0.95\textwidth]{plots_valid_lm_rq_fac.pdf}
+    \end{figure}
+
 \end{frame}
 
 % ----------
 
 \begin{frame}{Validation des modèles linéaires}
 
-\begin{figure}
-    \includegraphics[width = 0.72\textwidth]{plots_valid_1.pdf}
-\end{figure}
+    \begin{figure}
+        \includegraphics[width = 0.95\textwidth]{plots_valid_lm_rq_degre_1.pdf}
+    \end{figure}
 
 \end{frame}
 
@@ -840,7 +858,17 @@
 \begin{frame}{Validation des modèles quadratiques}
 
 \begin{figure}
-    \includegraphics[width = 0.72\textwidth]{plots_valid_2.pdf}
+    \includegraphics[width = 0.95\textwidth]{plots_valid_lm_rq_degre_2.pdf}
+\end{figure}
+
+\end{frame}
+
+% ----------
+
+\begin{frame}{Validation des modèles cubiques}
+
+\begin{figure}
+    \includegraphics[width = 0.95\textwidth]{plots_valid_lm_rq_degre_3.pdf}
 \end{figure}
 
 \end{frame}
@@ -850,31 +878,31 @@
 \begin{frame}{Données d'entrainement et de validation}
 
 \begin{itemize}
-    \fleche 5\% des observations ont été prises au hasard et on multiplie la valeur du paiement par 1000.
+    \fleche Multiplication par 1000 de 5\% des paiements pris au hasard.
 \end{itemize}
 
 \begin{figure}
-    \includegraphics[width = 0.6\textwidth]{train_val_02.png}
+    \includegraphics[width = 0.86\textwidth]{nuage_points_ab_overleaf.png}
 \end{figure}
 
 \end{frame}
 
 % ----------
 
-\begin{frame}{Entrainement des modèles quadratiques}
+\begin{frame}{Entrainement des modèles linéaires}
 
 \begin{figure}
-    \includegraphics[width = \textwidth]{plot_fit_2_ab.png}
+    \includegraphics[width = \textwidth]{fit_degre_1_ab.png}
 \end{figure}
 
 \end{frame}
 
 % ----------
 
-\begin{frame}{Validation des modèles quadratiques}
+\begin{frame}{Validation des modèles linéaires}
 
 \begin{figure}
-    \includegraphics[width = 0.72\textwidth]{plots_valid_2_ab.pdf}
+    \includegraphics[width = 0.95\textwidth]{plots_valid_lm_rq_degre_1_ab.pdf}
 \end{figure}
 
 \end{frame}
@@ -912,12 +940,14 @@
 \begin{frame}{Conclusion}
 
 \begin{itemize}
-    \fleche Dans la régression quantile, on devrait utiliser le plus de quantiles possible.
+    \fleche Régression quantile pas significativement meilleure que la régression linéaire selon notre critère.
+        \begin{itemize}
+            \cercle Un peu normal puisque ce sont des données simulées et que les paiements semblent distribués selon une lognormale.
+        \end{itemize}
+    \fleche Régression quantile surpasse la régression linéaire selon notre critère sur données avec valeurs aberrantes.
     \fleche L'ajustement de la régression quantile avec modèle linéaire montre qu'on ne peut pas utiliser la régression quantile aveuglément.
-    \fleche La statistique de Kolmogorov-Smirnov n'est pas adéquate pour comparer la performance des modèles.
-    \fleche Régression quantile pas significativement meilleure que la régression linéaire dans le modèle quadratique selon l'erreur absolue moyenne sur le total.
-    \fleche Régression quantile bien meilleure en présence de données aberrantes (lorsque la distribution des paiements est loin d'être lognormale).
-    \fleche Régression quantile donne de bons résultats lorsqu'elle est intégrée au modèle d'Antonio et Plat
+    \fleche La statistique de Kolmogorov-Smirnov n'est pas adéquate pour comparer la performance des modèles dans le contexte des réserves.
+    \fleche Régression quantile donne de bons résultats lorsqu'elle est intégrée au modèle d'Antonio et Plat.
 \end{itemize}
 
 \end{frame}
