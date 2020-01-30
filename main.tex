@@ -402,7 +402,7 @@
 
 \begin{frame}{Paramètres à estimer}
     
-    \begin{itemize}
+    \begin{itemize}[itemsep = 0.4cm]
         \fleche \textbf{Processus de survenance}
         \begin{itemize}
             \cercle Intensité constante par parties: $\lambda$.
@@ -414,7 +414,7 @@
         \fleche \textbf{Processus de développement}
         \begin{itemize}
             \cercle Intensité constante par parties des 3 types d'événements: $h_1, h_2$, $h_3$.
-            \cercle Paramètre de la distribution log-normale avec variables explicatives pour la sévérité des paiements.
+            \cercle Paramètres de la distribution log-normale avec variables explicatives pour la sévérité des paiements.
         \end{itemize}
     \end{itemize}
 
@@ -584,7 +584,7 @@
 
 \begin{frame}{Simulation des données de réclamations}
 
-    \begin{itemize}[itemsep = 0.25cm]
+    \begin{itemize}[itemsep = 0.4cm]
         \fleche Données simulées avec \texttt{Gabrielli, A., \& Wüthrich, M. (2018). An individual claims history simulation machine. \emph{Risks, 6}(2).}
         \fleche Plusieurs réseaux de neurones entrainés sur des données réelles.
         \fleche Le délai de déclaration et le processus de développement dépendent de 6 caractéristiques de la réclamation (\texttt{ligne d'affaire}, \texttt{code de réclamation}, \texttt{année d'accident}, \texttt{trimestre d'accident}, \texttt{âge}, \texttt{partie du corps blessée}).
@@ -909,29 +909,49 @@
 
 % ----------
 
-\begin{frame}{Résultats - DY et DY$^2$ comme prédicteurs}
+% \begin{frame}{Résultats - DY et DY$^2$ comme prédicteurs}
+
+% \begin{figure}
+%     \includegraphics[width = \textwidth]{resultats_reserve_RBNS_01.pdf}
+% \end{figure}
+
+% \begin{itemize}
+%     \fleche $\texttt{log-paiement} \sim \texttt{DY} + \texttt{DY}^2$
+% \end{itemize}
+
+% \end{frame}
+
+% ----------
+
+% \begin{frame}{Résultats - Tous les prédicteurs}
+
+% \begin{figure}
+%     \includegraphics[width = \textwidth]{resultats_reserve_RBNS_02.pdf}
+% \end{figure}
+
+% \begin{itemize}
+%     \fleche $\texttt{log-paiement} \sim \texttt{DY} + \texttt{DY}^2 + \texttt{AY} + \texttt{RepDel} + \texttt{age} + \texttt{inj\_part}$
+% \end{itemize}
+
+% \end{frame}
+
+% ----------
+
+\begin{frame}{test1}
 
 \begin{figure}
-    \includegraphics[width = \textwidth]{resultats_reserve_RBNS_01.pdf}
+    \includegraphics[width = \textwidth]{pred_dist_degre_2.pdf}
 \end{figure}
-
-\begin{itemize}
-    \fleche $\texttt{log-paiement} \sim \texttt{DY} + \texttt{DY}^2$
-\end{itemize}
 
 \end{frame}
 
 % ----------
 
-\begin{frame}{Résultats - Tous les prédicteurs}
+\begin{frame}{test2}
 
 \begin{figure}
-    \includegraphics[width = \textwidth]{resultats_reserve_RBNS_02.pdf}
+    \includegraphics[width = \textwidth]{pred_dist_degre_1_ab.pdf}
 \end{figure}
-
-\begin{itemize}
-    \fleche $\texttt{log-paiement} \sim \texttt{DY} + \texttt{DY}^2 + \texttt{AY} + \texttt{RepDel} + \texttt{age} + \texttt{inj\_part}$
-\end{itemize}
 
 \end{frame}
 
