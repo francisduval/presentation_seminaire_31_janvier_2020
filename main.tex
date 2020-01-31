@@ -105,7 +105,7 @@
 \begin{frame}{Contenu}
 
      \circled{1} Modèle d'Antonio et Plat\\ \vspace{0.6cm}
-     \circled{2} Adaptation à la base de données simulée\\ \vspace{0.6cm}
+     \circled{2} Adaptation aux données simulée\\ \vspace{0.6cm}
      \circled{3} Modifications apportées au modèle d'Antonio et Plat -- Francis\\ \vspace{0.6cm}
      \circled{4} Modifications apportées au modèle d'Antonio et Plat -- Manuel\\ \vspace{0.6cm}
 
@@ -409,7 +409,7 @@
         \end{itemize}
         \fleche \textbf{Délai de déclaration}
         \begin{itemize}
-            \cercle Paramètres de la distribution Weibull et les 8 composantes dégénérées.
+            \cercle Paramètres de la distribution Weibull et les 9 composantes dégénérées.
         \end{itemize}
         \fleche \textbf{Processus de développement}
         \begin{itemize}
@@ -578,7 +578,7 @@
 
 % ----------
 
-\section{Adaptation à la base de données simulée}
+\section{Adaptation aux données simulées}
 
 % ----------
 
@@ -892,7 +892,7 @@
 \begin{frame}{Entrainement des modèles linéaires}
 
 \begin{figure}
-    \includegraphics[width = \textwidth]{fit_degre_1_ab.png}
+    \includegraphics[width = 0.95\textwidth]{fit_degre_1_ab.png}
 \end{figure}
 
 \end{frame}
@@ -1103,6 +1103,384 @@
     \end{itemize}
 \end{itemize}
 \end{frame}
+
+\begin{frame}{Adaptation du modèle aux données simulées}
+\begin{table}[!h]
+    \centering
+    \begin{tabular}{l c c c c c}
+    \hline
+     & Moyenne & Médiane & Min & Max & \\
+    \hline
+    SdA 1 et 4 & 904.88 & 326 & 3.59 & 245 820 & \\
+    SdA 2 et 3 & 4575.724 & 1438.80 & 16.17 & 908 429.22 &  \\
+    \hline
+    \\
+    \hline
+     & 5\% & 25\% & 75\% & 95\% & 99\% \\
+     \hline
+     SdA 1 et 4 & 55 & 156.36 & 721.48 & 2928.98 & 10 056.60 \\
+     SdA 2 et 3 & 222.64 & 664.62 & 3289.24 & 14 436.61 & 58 985.51 \\
+     \hline
+    \end{tabular}
+    \caption{Caractéristiques des paiements observés dans chaque groupe de secteurs d'activités.}
+    \label{tab_pay_den}
+\end{table}
+\end{frame}
+
+\frame{
+\frametitle{Application numérique}
+\begin{itemize}
+    \fleche Modélisation des paiements à l'aide d'arbres de décisions.
+    \pause
+    \fleche En excluant les évènements où il n'y a aucun paiement:
+    \begin{itemize}
+        \cercle 75 515 paiements pour les secteurs d'affaires $\{1,4\}$.
+        \cercle 33 703 paiements pour les secteurs d'affaires $\{2,3\}$.
+    \end{itemize}
+\end{itemize} 
+}
+
+\frame{
+\frametitle{Application numérique}
+\begin{itemize}
+    \fleche Le choix du nombre d'observations minimales:
+    \begin{itemize}
+        \cercle Le choix du nombre d'observations minimales:
+        \begin{itemize}
+            \cercle Par validation croisée.
+            \cercle À l'aide de la statistique \textit{xerror}. 
+        \end{itemize}
+        \pause
+        \cercle Pour le groupe $\{1,4\}$, les feuilles doivent contenir au minimum 0.5\% des observations (378).
+        \cercle Pour le groupe $\{2,3\}$, au minimum 0.4\% des observations (134).
+    \end{itemize}
+    \pause
+    \fleche Élagage de l'arbre de décision:
+    \begin{itemize}
+        \cercle Le choix fut de prendre le $\alpha$ qui minimise le \textit{xerror}.
+        \pause
+        \cercle Le groupe $\{1,4\}$ comporte 33 feuilles.
+        \cercle Le groupe $\{2,3\}$ comporte 32 feuilles.
+    \end{itemize}
+\end{itemize} 
+
+}
+
+\frame{
+\frametitle{Application numérique}
+\begin{itemize}
+    \fleche Ajustement univarié:
+    \begin{itemize}
+        \cercle Le groupe $\{1,4\}$ comporte uniquement des distributions log normales.
+        \cercle Le groupe $\{2,3\}$ a 30 feuilles avec des distributions log normal et 2 feuilles avec des distributions de Pareto.
+    \end{itemize}
+    \pause
+    \fleche Modèle de contrôle:
+    \begin{itemize}
+        \cercle Modèle linéaire généralisé (MLG).
+        \cercle Mêmes variables que dans les arbres de décisions.
+    \end{itemize}
+\end{itemize} 
+
+}
+
+\frame{
+\frametitle{Application numérique}
+\begin{itemize}
+    \fleche Librairies en R:
+    \begin{itemize}
+        \cercle actuar
+        \cercle fitdistrplus
+        \cercle parallel
+        \cercle pbapply
+        \cercle rpart
+        \cercle rpart.plot
+        \cercle treeClust
+    \end{itemize}
+\end{itemize} 
+}
+\frame{
+\frametitle{Application numérique}
+\begin{itemize}
+    \fleche Étapes pour la simulation du paiements
+    \begin{itemize}
+        \item \textbf{1.} Déterminer les hyperparamètres pour l'arbre.
+        \item \textbf{2.} Construire l'arbre et l'élaguer.
+        \item \textbf{3.} Pour chaque paiement dans notre base de données de paiements, prédire la feuille dans laquelle il sera.
+        \item \textbf{4.} Lorsqu'un paiement doit être simulé pour une réclamation à un temps $t$, à l'aide des variables explicatives liées à la réclamation et le temps $t$ du paiement, prédire la feuille dans laquelle le nouveau paiement sera. 
+        \item \textbf{5.} Faire une pige dans le vecteur de paiements correspondant.
+    \end{itemize}
+\end{itemize} 
+}
+
+\frame{
+\frametitle{Application numérique}
+\begin{itemize}
+    \fleche Étapes pour la simulation du paiements - Variante
+    \begin{itemize}
+        \item \textbf{1.} Déterminer les hyperparamètres pour l'arbre.
+        \item \textbf{2.} Construire l'arbre et l'élaguer.
+        \item \textbf{3.} Pour chaque paiement dans notre base de données de paiements, prédire la feuille dans laquelle il sera.
+        \item \textcolor{blue}{\textbf{4.} Pour chaque feuille, faire un ajustement univarié à l'aide de divers lois. Enregistrer les paramètres et la loi dans une base de données. }
+        \item \textbf{5.} Lorsqu'un paiement doit être simulé pour une réclamation à un temps $t$, à l'aide des variables explicatives liées à la réclamation et le temps $t$ du paiement, prédire la feuille dans laquelle le nouveau paiement sera. 
+        \item \textcolor{blue}{\textbf{6.} Selon la feuille, simuler une réalisation de la distribution calculée à l'étape 4.}
+    \end{itemize}
+\end{itemize} 
+}
+
+\frame{
+\frametitle{Application numérique}
+\begin{figure}[!ht]
+   \centering
+   \subfloat{\includegraphics[width=\textwidth]{Stack_Param.PNG}}
+   \label{pai_23}
+\end{figure}
+}
+
+\frame{
+\frametitle{Résultats}
+\begin{itemize}
+    \fleche 10 000 simulations.
+    \pause
+    \fleche $VaR_{\0.95}$ et $VaR_{\0.99}$.
+    \pause
+    \fleche $TVaR_{\0.95}$ et $TVaR_{\0.99}$.
+\end{itemize}
+}
+
+\frame{
+\frametitle{Résultats - SdA 1 et 4}
+\begin{center}
+\setlength{\tabcolsep}{2pt}
+     \footnotesize
+\begin{tabular}[!h]
+    \centering
+    \begin{tabular}{c c c c c c c c }
+    \hline
+      & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\
+    \hline
+    1994 & 5 267 739 & 2 861 217 & 984 366 & 693 844 & 424 251 & 356 870 & 281 004  \\
+    1995 & 5 042 668 & 2 387 215 & 757 507 & 426 723 & 297 264 & 219 686 & \textbf{190 739} \\
+    1996 & 5 136 459 & 2 989 370 & 1 114 484 & 656 864 & 421 078 & \textbf{312 076} & \textbf{234 168}  \\
+    1997 & 4 698 430 & 2 434 732 & 898 441 & 482 069 & \textbf{340 537} & \textbf{236 044} & \textbf{154 369}  \\
+    1998 & 5 032 212 & 2 778 030 & 1 010 774 & \textbf{644 286} & \textbf{444 630} & \textbf{300 657} & \textbf{214 337}  \\
+    1999 & 5 031 191 & 2 709 034 & \textbf{1 135 874} & \textbf{623 700} & \textbf{403 146} & \textbf{280 733} & \textbf{183 125}  \\
+    2000 & 5 436 820 & \textbf{2 998 817} & \textbf{1 290 701} & \textbf{785 669} & \textbf{530 200} & \textbf{370 414} & \textbf{275 939}  \\
+    \hline
+    \end{tabular}
+    \caption{Triangle incrémental pour les secteurs d'affaires 1 et 4. Les valeurs en gras sont les valeurs des paiements de la base de validation.}
+    \label{Tri_14}
+\end{tabular}
+\end{center}
+}
+
+\frame{
+\frametitle{Résultats - SdA 1 et 4}
+\begin{figure}[!ht]
+   \centering
+   \subfloat{\includegraphics[width=.45\textwidth]{GLM_14.PNG}}\quad
+   \subfloat{\includegraphics[width=.45\textwidth]{Arbre_14.PNG}}\quad
+   \subfloat{\includegraphics[width=.45\textwidth]{Arbre_Ajust_14.PNG}}\\
+   \label{Reserve_14}
+\end{figure}
+}
+
+\frame{
+\frametitle{Résultats - SdA 1 et 4}
+\begin{center}
+\setlength{\tabcolsep}{2pt}
+     \small
+\begin{tabular}[!h]
+    \centering
+    \begin{tabular}{c  c c c c c c}
+    \hline
+     Modèle & Moyenne & Écart-type & $VaR_{0.95}$ & $VaR_{0.99}$ & $TVaR_{0.95}$ & $TVaR_{0.99}$ \\
+    \hline
+    Ind. GLM & 12 019.4 & 402.8 & 12 692.5 & 12 987.1 & 12 873.9 & 13 113.1\\
+    Ind. Arbre & 11 665.8 & 462.1 & 12 434.7 & 12 760.7 & 12 632.1 & 12 931.0\\
+    Ind. Arbre + Ajust. & 11 459.7 & 515.5 & 12 338.8 & 12 776.9 & 12 622.1 & 13 059.9\\
+    Observé & 11 950.1 & & & & & \\
+    \hline
+    \end{tabular}
+    \label{Car_Reserve_14}
+\end{tabular}
+\end{center}
+}
+
+\frame{
+\frametitle{Résultats - SdA 1 et 4}
+\begin{itemize}
+    \fleche \textbf{Modèle ind. arbre}
+    \begin{itemize}
+        \cercle L'échantionnage dans le vecteur empirique impose une borne supérieure aux paiements qui sont simulés.
+    \end{itemize}
+    \fleche \textbf{Modèle ind. arbre + ajustement}
+    \begin{align*}
+            &\mathbb{P}\left[P \geq max(p_{R_i}) \right] \leq \frac{1}{\#\{n \in R_i \}}
+        \end{align*}
+   
+\end{itemize}
+}
+
+\frame{
+\frametitle{Résultats - SdA 2 et 3}
+\begin{center}
+\setlength{\tabcolsep}{2pt}
+     \footnotesize
+\begin{tabular}[!h]
+    \centering
+    \begin{tabular}{c c c c c c c c }
+    \hline
+      & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\
+    \hline
+    1994 & 13 817 499 & 6 125 217 & 1 892 641 & 935 175 & 445 483 & 475 312 & 358 699  \\
+    1995 & 12 134 574 & 5 836 604 & 2 185 736 & 847 248 & 535 249 & 335 117 & \textbf{233 806} \\
+    1996 & 12 013 964 & 7 509 183 & 3 185 326 & 1 522 286 & 853 380 & \textbf{656 966} & \textbf{458 252}  \\
+    1997 & 12 189 174 & 7 140 726 & 3 221 795 & 1 412 041 & \textbf{812 177} & \textbf{541 987} & \textbf{405 723}  \\
+    1998 & 10 321 082 & 5 392 646 & 1 571 823 & \textbf{678 902} & \textbf{398 893} & \textbf{277 442} & \textbf{230 762}  \\
+    1999 & 12 409 959 & 7 809 218 & \textbf{2 752 899} & \textbf{1 222 011} & \textbf{643 754} & \textbf{405 577} & \textbf{366 801}  \\
+    2000 & 10 802 693 & \textbf{4 603 907} & \textbf{1 450 900} & \textbf{664 911} & \textbf{365 487} & \textbf{281 374} & \textbf{154 630}  \\
+    \hline
+    \end{tabular}
+    \label{Tri_14}
+\end{tabular}
+\end{center}
+}
+
+\frame{
+\frametitle{Résultats - SdA 2 et 3}
+\begin{figure}[!ht]
+   \centering
+   \subfloat{\includegraphics[width=.45\textwidth]{GLM_23.PNG}}\quad
+   \subfloat{\includegraphics[width=.45\textwidth]{Arbre_23.PNG}}\quad
+   \subfloat{\includegraphics[width=.45\textwidth]{Arbre_Ajust_23.PNG}}\\
+   \label{Reserve_23}
+\end{figure}
+}
+
+\frame{
+\frametitle{Résultats - SdA 2 et 3}
+\begin{center}
+\setlength{\tabcolsep}{2pt}
+     \small
+\begin{tabular}[!h]
+    \centering
+    \begin{tabular}{c c c c c c c}
+    \hline
+     Modèle & Moyenne & Écart-type & $VaR_{0.95}$ & $VaR_{0.99}$ & $TVaR_{0.95}$ & $TVaR_{0.99}$ \\
+    \hline
+    Ind. GLM & 20 618.8 & 2348.0 & 24 601.9 & 26 317.8 & 25 668.9 & 27 309.6\\
+    Ind. Arbre & 23 798.8 & 3546.4 & 29 642.8 & 32 359.7 & 31 287.9 & 33 475.5\\
+    Ind. Arbre + Ajust. & 24 969.3 & 5513.7 & 34 359.0 & 40 629.9 & 38 583.0 & 45 500.7\\
+    Observé & 17 607.1 & & & & & \\
+    \hline
+    \end{tabular}
+    \label{Car_Reserve_14}
+\end{tabular}
+\end{center}
+}
+
+\begin{frame}{Résultats - SdA 2 et 3}
+\begin{table}[!h]
+    \centering
+    \begin{tabular}{l c c c c c}
+    \hline
+     & Moyenne & Médiane & Min & Max & \\
+    \hline
+    SdA 1 et 4 & 904.88 & 326 & 3.59 & 245 820 & \\
+    SdA 2 et 3 & 4575.724 & 1438.80 & 16.17 & 908 429.22 &  \\
+    \hline
+    \\
+    \hline
+     & 5\% & 25\% & 75\% & 95\% & 99\% \\
+     \hline
+     SdA 1 et 4 & 55 & 156.36 & 721.48 & 2928.98 & 10 056.60 \\
+     SdA 2 et 3 & 222.64 & 664.62 & 3289.24 & 14 436.61 & 58 985.51 \\
+     \hline
+    \end{tabular}
+    \caption{Caractéristiques des paiements observés dans chaque groupe de secteurs d'activités.}
+    \label{tab_pay_den}
+\end{table}
+\end{frame}
+
+\frame{
+\frametitle{Résultats - SdA 2 et 3}
+\begin{figure}[!ht]
+   \centering
+   \subfloat{\includegraphics[width=.90\textwidth]{Fig_14.PNG}}
+   \label{pai_23}
+\end{figure}
+}
+
+\frame{
+\frametitle{Conclusion}
+\begin{itemize}
+    \fleche Est-ce que les arbres de décisions sont une option viable à l'approche paramétrique?
+    \pause
+    \begin{itemize}
+        \item (+) Facile à ajouter dans l'algorithme de simulation.
+        \pause
+        \item (+) Intuitif à comprendre.
+        \pause
+        \item (+) Résultats similaires à ceux du modèle MLG quand la base de données ne pose pas de problèmes.
+    \end{itemize}
+    \pause
+    \begin{itemize}
+        \item (-) Si valeurs aberrantes présentes, les arbres de décisions ne sont pas assez robustes pour mitiger l'influence de ces valeurs. Accentuer avec l'ajout de la composante d'ajustement univariée.
+        \pause
+        \item (-) Augmente la volatilité de la distribution de réserve.
+    \end{itemize}
+\end{itemize}
+}
+
+\frame{
+\frametitle{Conclusion}
+\begin{itemize}
+    \fleche Prometteurs, mais plusieurs autres aspects doivent être étudiés avant que ceux-ci soient réellement utilisés dans le milieu pratique.
+    \pause
+    \fleche Lorsque le nombre de simulations augmente, avons-nous une distribution qui devient semblable à celle du modèle avec MLG?
+    \pause
+    \fleche Avec une base de données ayant des covariables avec des effets d'interactions, est-ce que les modèles avec arbres de décisions sont plus efficaces que les modèles avec MLG?
+    \pause
+    \fleche Est-ce que l'utilisation d'une plus grande panoplie de distributions pour le modèle avec ajustement univarié peut améliorer de façon significative la distribution des réserves?
+\end{itemize}
+}
+
+\frame{
+\frametitle{Conclusion}
+\begin{itemize}
+    \fleche Prometteurs, mais plusieurs autres aspects doivent être étudiés avant que ceux-ci soient réellement utilisés dans le milieu pratique.
+    \item Est-ce que l'utilisation des forêts aléatoires pourrait être ajoutée dans l'algorithme?
+    \begin{itemize}
+        \cercle Réalisation d'une loi uniforme $[0,1]$.
+        \cercle Trouver le quantile empirique des paiements sachant la feuille pour chaque arbre.
+        \cercle Moyenne du vecteur de quantile pourrait ensuite être utilisée comme réalisation de paiement.
+    \end{itemize}
+\end{itemize}
+}
+
+\frame{
+\frametitle{Références}
+\tiny
+\begin{itemize}
+    \item[] Antonio, K., Plat, R., 2014. Micro-level stochastic loss reserving for general insurance. Scand. Actuar. J. 2014 (7), 649–669.
+    \item[] Arjas, E., 1989. The claims reserving problem in non-life insurance: Some structural ideas. ASTIN Bull. 19 (2), 139–152.
+    \item[] Avanzi, B., Wong, B., Yang, X., 2016. A micro-level claim count model with overdispersion and reporting delays. Insurance : Mathematics and Economics (71), 1-14.
+    \item[] Breiman, L., Friedman, J., Olshen, R. A., Stone, C. J., 1984. Classification and Regression Trees. Chapman and Hall. 
+    \item[] Duval, F., Pigeon, M., 2019. Individual loss reserving using a gradient boosting-based approach. Risks 7 (79), 1-18.
+    \item[] Grenier, M., 2019. Travail 2 : Antionio & Plat (2014) - Application d’un modèle de réserve individuel. UQAM, 1-14.
+    \item[] Kuo, K., 2019. DeepTriangle: A deep learning approach to loss reserving. Risks 7(3) 97, 1-13.
+    \item[] Lopez, O., 2019. A censored copula model for micro-level claim reserving. Insurance : Mathematics and Economics (87), 1-14.
+    \item[] Lopez, O., Milhaud, X., Thérond, P-E., 2019. A tree-based algorithm adapted to microlevel reserving and long development claims. ASTIN Bull. 49(3), 741-762. 
+    \item[] Lopez, O., Milhaud, X., Thérond, P-E., 2016. Tree-based censored regression with application in insurance. Electronic Journal of Statistics (10), 2685-2716.
+    \item[] Norberg, R., 1993. Prediction of outstanding liabilities in non-life insurance. ASTIN Bulletin 23 (1), 95–115. 
+    \item[] Norberg, R., 1999. Prediction of outstanding liabilities - ii model variations and extensions. ASTIN Bulletin 29 (1), 5–27.
+    \item[] Pigeon, M., 2019. MAT9594: Note de cours numéro 7 sur les arbres de décisions. UQAM.
+    \item[] Reynkens, T., Roel, V., Beirlant, J., Antonio, K., 2016. Modeling censored losses using splicing : A global fit strategy with mixed erlang and extreme value distributions. SSNR Electronic Journal. 1-29.
+    \item[] Wüthrich, M. V., 2018. Machine learning in individual claims reserving. Scandinavian Actuarial Journal (6), 465-480.
+    \item[] Wüthrich M. V., Gabrielli, A., 2018. An individual claims history simulation machine. Risks 6 (29),1–32.
+\end{itemize}
+}
 
 
 % ------------------------------------------------------------------------------------------------------------------------------
