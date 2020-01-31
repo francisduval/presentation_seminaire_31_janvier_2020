@@ -772,12 +772,12 @@
     \begin{itemize}[itemsep = 0.4cm]
         \fleche Comparaison de la performance entre la \textbf{régression linéaire} et la \textbf{régression quantile} sur le jeu de données simulé.
         \fleche Performance mesurée avec la statistique de \textbf{Kolmogorov-Smirnov} et avec l'\textbf{erreur absolue moyenne} sur le total des paiements.
-        \fleche 4 formules considérées: 
+        \fleche 3 formules considérées: 
         \begin{itemize}
             \cercle Modèle catégoriel: \texttt{Log-paiement $\sim$ as.factor(DY)}
             \cercle Modèle linéaire: \texttt{Log-paiement $\sim$ DY}
             \cercle Modèle quadratique: \texttt{Log-paiement $\sim$ DY + DY$^2$}
-            \cercle Modèle cubique: \texttt{Log-paiement $\sim$ DY + DY$^2$ + DY$^3$}
+            % \cercle Modèle cubique: \texttt{Log-paiement $\sim$ DY + DY$^2$ + DY$^3$}
         \end{itemize}
     \end{itemize}
     
@@ -825,13 +825,13 @@
 
 % ----------
 
-\begin{frame}{Entrainement des modèles cubiques}
+% \begin{frame}{Entrainement des modèles cubiques}
 
-    \begin{figure}
-        \includegraphics[width = \textwidth]{fit_degre_3.png}
-    \end{figure}
+%     \begin{figure}
+%         \includegraphics[width = \textwidth]{fit_degre_3.png}
+%     \end{figure}
     
-\end{frame}
+% \end{frame}
 
 % ----------
 
@@ -865,13 +865,13 @@
 
 % ----------
 
-\begin{frame}{Validation des modèles cubiques}
+% \begin{frame}{Validation des modèles cubiques}
 
-\begin{figure}
-    \includegraphics[width = 0.95\textwidth]{plots_valid_lm_rq_degre_3.pdf}
-\end{figure}
+% \begin{figure}
+%     \includegraphics[width = 0.95\textwidth]{plots_valid_lm_rq_degre_3.pdf}
+% \end{figure}
 
-\end{frame}
+% \end{frame}
 
 % ----------
 
@@ -902,55 +902,37 @@
 \begin{frame}{Validation des modèles linéaires}
 
 \begin{figure}
-    \includegraphics[width = 0.95\textwidth]{plots_valid_lm_rq_degre_1_ab.pdf}
+    \includegraphics[width = \textwidth]{plots_valid_lm_rq_degre_1_ab.pdf}
 \end{figure}
 
 \end{frame}
 
 % ----------
 
-% \begin{frame}{Résultats - DY et DY$^2$ comme prédicteurs}
-
-% \begin{figure}
-%     \includegraphics[width = \textwidth]{resultats_reserve_RBNS_01.pdf}
-% \end{figure}
-
-% \begin{itemize}
-%     \fleche $\texttt{log-paiement} \sim \texttt{DY} + \texttt{DY}^2$
-% \end{itemize}
-
-% \end{frame}
-
-% ----------
-
-% \begin{frame}{Résultats - Tous les prédicteurs}
-
-% \begin{figure}
-%     \includegraphics[width = \textwidth]{resultats_reserve_RBNS_02.pdf}
-% \end{figure}
-
-% \begin{itemize}
-%     \fleche $\texttt{log-paiement} \sim \texttt{DY} + \texttt{DY}^2 + \texttt{AY} + \texttt{RepDel} + \texttt{age} + \texttt{inj\_part}$
-% \end{itemize}
-
-% \end{frame}
-
-% ----------
-
-\begin{frame}{test1}
+\begin{frame}{Résultats -- Données originales}
 
 \begin{figure}
-    \includegraphics[width = \textwidth]{pred_dist_degre_2.pdf}
+    \includegraphics[width = 1.03\textwidth]{pred_dist_degre_2.pdf}
 \end{figure}
 
 \end{frame}
 
 % ----------
 
-\begin{frame}{test2}
+\begin{frame}{Résultats -- Données originales (suite)}
 
 \begin{figure}
-    \includegraphics[width = \textwidth]{pred_dist_degre_1_ab.pdf}
+    \includegraphics[width = 1.03\textwidth]{pred_dist_all_predictors.pdf}
+\end{figure}
+
+\end{frame}
+
+% ----------
+
+\begin{frame}{Résultats -- Données avec valeurs aberrantes}
+
+\begin{figure}
+    \includegraphics[width = 1.03\textwidth]{pred_dist_degre_1_ab.pdf}
 \end{figure}
 
 \end{frame}
@@ -960,14 +942,12 @@
 \begin{frame}{Conclusion}
 
 \begin{itemize}
-    \fleche Régression quantile pas significativement meilleure que la régression linéaire selon notre critère.
-        \begin{itemize}
-            \cercle Un peu normal puisque ce sont des données simulées et que les paiements semblent distribués selon une lognormale.
-        \end{itemize}
+    \fleche Régression quantile pas significativement meilleure que la régression linéaire sur les données originales.
     \fleche Régression quantile surpasse la régression linéaire selon notre critère sur données avec valeurs aberrantes.
     \fleche L'ajustement de la régression quantile avec modèle linéaire montre qu'on ne peut pas utiliser la régression quantile aveuglément.
     \fleche La statistique de Kolmogorov-Smirnov n'est pas adéquate pour comparer la performance des modèles dans le contexte des réserves.
-    \fleche Régression quantile donne de bons résultats lorsqu'elle est intégrée au modèle d'Antonio et Plat.
+    \fleche Régression quantile donne des résultats corrects lorsqu'elle est intégrée au modèle d'Antonio et Plat avec tous les prédicteurs.
+    \fleche Ne pas oublier que les paiements simulés sont distribués selon une log-normale presque parfaitement, ce qui n'est pas réaliste.
 \end{itemize}
 
 \end{frame}
@@ -1123,13 +1103,6 @@
     \end{itemize}
 \end{itemize}
 \end{frame}
-
-
-% ----------
-% ----------
-% ----------
-% ----------
-% ----------
 
 
 % ------------------------------------------------------------------------------------------------------------------------------
